@@ -31,6 +31,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Normalize image prefix
+        run: echo "IMAGE_PREFIX_LOWER=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
       - name: Build and push user-service
         uses: docker/build-push-action@v6
         with:
@@ -38,8 +41,8 @@ jobs:
           file: services/user-service/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/user-service:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/user-service:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/user-service:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/user-service:latest
 
       - name: Build and push order-service
         uses: docker/build-push-action@v6
@@ -48,8 +51,8 @@ jobs:
           file: services/order-service/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/order-service:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/order-service:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/order-service:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/order-service:latest
 
       - name: Build and push repository-service
         uses: docker/build-push-action@v6
@@ -58,8 +61,8 @@ jobs:
           file: services/repository-service/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/repository-service:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/repository-service:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/repository-service:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/repository-service:latest
 
       - name: Build and push web-portal
         uses: docker/build-push-action@v6
@@ -67,8 +70,8 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/web-portal:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/web-portal:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/web-portal:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/web-portal:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -93,10 +96,10 @@ jobs:
 
       - name: Update images
         run: |
-          kubectl -n $K8S_NAMESPACE set image deployment/user-service user-service=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/user-service:${{ github.sha }}
-          kubectl -n $K8S_NAMESPACE set image deployment/order-service order-service=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/order-service:${{ github.sha }}
-          kubectl -n $K8S_NAMESPACE set image deployment/repository-service repository-service=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/repository-service:${{ github.sha }}
-          kubectl -n $K8S_NAMESPACE set image deployment/web-portal web-portal=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/web-portal:${{ github.sha }}
+          kubectl -n $K8S_NAMESPACE set image deployment/user-service user-service=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/user-service:${{ github.sha }}
+          kubectl -n $K8S_NAMESPACE set image deployment/order-service order-service=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/order-service:${{ github.sha }}
+          kubectl -n $K8S_NAMESPACE set image deployment/repository-service repository-service=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/repository-service:${{ github.sha }}
+          kubectl -n $K8S_NAMESPACE set image deployment/web-portal web-portal=${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX_LOWER }}/web-portal:${{ github.sha }}
 
       - name: Run migrations
         run: |
