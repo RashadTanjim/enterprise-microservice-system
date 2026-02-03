@@ -1,0 +1,70 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-user
+  namespace: enterprise-ms
+  labels:
+    app.kubernetes.io/name: migrate-user
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrate-user
+          image: ghcr.io/your-org/enterprise-microservice-system/user-service:latest
+          command: ["./user-service-migrate"]
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+          env:
+            - name: USER_SERVICE_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: POSTGRES_PASSWORD
+            - name: AUTH_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AUTH_JWT_SECRET
+            - name: AUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AUTH_CLIENT_SECRET
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-order
+  namespace: enterprise-ms
+  labels:
+    app.kubernetes.io/name: migrate-order
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrate-order
+          image: ghcr.io/your-org/enterprise-microservice-system/order-service:latest
+          command: ["./order-service-migrate"]
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secrets
+          env:
+            - name: ORDER_SERVICE_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: POSTGRES_PASSWORD
+            - name: AUTH_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AUTH_JWT_SECRET

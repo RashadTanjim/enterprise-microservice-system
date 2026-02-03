@@ -20,6 +20,10 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-w -s" \
     -o user-service ./services/user-service/cmd/main.go
 
+# Build the migrate binary
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-w -s" \
+    -o user-service-migrate ./services/user-service/cmd/migrate/main.go
+
 # Runtime stage
 FROM alpine:latest
 
@@ -31,6 +35,7 @@ WORKDIR /root/
 
 # Copy binary from builder
 COPY --from=builder /app/user-service .
+COPY --from=builder /app/user-service-migrate .
 
 # Copy .env.example if needed (optional)
 COPY --from=builder /app/.env.example .

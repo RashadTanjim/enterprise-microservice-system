@@ -150,6 +150,7 @@ enterprise-microservice-system/
 │       └── docs/                 # Swagger docs (generated)
 ├── monitoring/
 │   └── prometheus.yml            # Prometheus configuration
+├── k8s/                           # Kubernetes manifests (deployments, services, ingress)
 ├── docs/                          # API tooling and docs assets
 │   ├── HLD.md
 │   ├── hld-diagram.svg
@@ -720,6 +721,11 @@ make lint
 - Runs `make test` and link checks on every push and pull request.
 - Runs frontend unit tests and build.
 
+### GitHub Actions CD
+- Builds and pushes Docker images to GHCR on pushes to `main` or `develop`.
+- Deploys to Kubernetes using manifests in `k8s/` and updates images to the commit SHA.
+- Runs migration jobs for user and order services after deployment.
+
 ### Postman Collection
 - Import `docs/collections/enterprise-microservice-system.postman_collection.json` and `docs/collections/enterprise-microservice-system.postman_environment.json`.
 - Run “Auth → Issue Token” to populate the `token` environment variable before calling protected endpoints.
@@ -800,6 +806,25 @@ docker build -t order-service:latest -f services/order-service/Dockerfile .
 # Build repository service
 docker build -t repository-service:latest -f services/repository-service/Dockerfile .
 ```
+
+### Kubernetes Deployment
+
+Prerequisites:
+- A Kubernetes cluster with ingress-nginx (or update `k8s/ingress.yaml`).
+- GHCR access and `KUBE_CONFIG_DATA` secret configured for CI/CD.
+
+Manual deploy (local):
+```bash
+kubectl apply -k k8s
+kubectl -n enterprise-ms apply -f k8s/migrations.yaml
+```
+
+To access the portal locally, map the ingress hostname:
+```
+enterprise.local -> your ingress controller IP
+```
+
+Update the image registry paths in the `k8s/*.yaml` files to match your registry.
 
 ### Production Considerations
 
