@@ -875,6 +875,12 @@ curl http://localhost:8082/health
 curl http://localhost:8083/health
 ```
 
+## Call Flow Diagram
+
+The end-to-end request flow (auth, user list, order creation, repository list) is documented here:
+
+![Call Flow](docs/call-flow.svg)
+
 ## Troubleshooting
 
 ### Common Issues
