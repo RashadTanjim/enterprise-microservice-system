@@ -95,3 +95,11 @@ func (p *CachedTokenProvider) HasCachedToken() bool {
 	defer p.mu.RUnlock()
 	return p.currentToken != ""
 }
+
+// GetRenewalThreshold returns the configured renewal threshold.
+// This is primarily useful for testing.
+func (p *CachedTokenProvider) GetRenewalThreshold() time.Duration {
+	p.mu.RLock()
+	defer p.mu.RUnlock()
+	return p.renewalThreshold
+}

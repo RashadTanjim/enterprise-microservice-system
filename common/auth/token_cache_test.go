@@ -173,7 +173,7 @@ func TestCachedTokenProvider_DefaultRenewalThreshold(t *testing.T) {
 	// Pass 0 for renewal threshold to use default
 	provider := NewCachedTokenProvider(config, subject, roles, 0)
 
-	if provider.renewalThreshold != 5*time.Minute {
-		t.Fatalf("Expected default renewal threshold of 5 minutes, got %v", provider.renewalThreshold)
+	if provider.GetRenewalThreshold() != 5*time.Minute {
+		t.Fatalf("Expected default renewal threshold of 5 minutes, got %v", provider.GetRenewalThreshold())
 	}
 }
