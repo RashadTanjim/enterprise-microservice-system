@@ -87,3 +87,11 @@ func (p *CachedTokenProvider) InvalidateToken() {
 	p.currentToken = ""
 	p.expiresAt = time.Time{}
 }
+
+// HasCachedToken returns true if a token is currently cached (not necessarily valid).
+// This is primarily useful for testing.
+func (p *CachedTokenProvider) HasCachedToken() bool {
+	p.mu.RLock()
+	defer p.mu.RUnlock()
+	return p.currentToken != ""
+}

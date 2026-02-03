@@ -89,15 +89,18 @@ func TestCachedTokenProvider_InvalidateToken(t *testing.T) {
 		t.Fatalf("Failed to get token: %v", err)
 	}
 
+	// Verify token is cached
+	if !provider.HasCachedToken() {
+		t.Error("Expected token to be cached")
+	}
+
 	// Invalidate the token
 	provider.InvalidateToken()
 
 	// Verify token is invalidated
-	provider.mu.RLock()
-	if provider.currentToken != "" {
-		t.Error("Expected currentToken to be empty after invalidation")
+	if provider.HasCachedToken() {
+		t.Error("Expected token to be cleared after invalidation")
 	}
-	provider.mu.RUnlock()
 
 	// Next call should generate a new token
 	token2, err := provider.GetToken()
@@ -108,6 +111,11 @@ func TestCachedTokenProvider_InvalidateToken(t *testing.T) {
 	// Token should not be empty
 	if token2 == "" {
 		t.Fatal("Expected non-empty token after invalidation")
+	}
+
+	// Token should be cached again
+	if !provider.HasCachedToken() {
+		t.Error("Expected token to be cached after regeneration")
 	}
 }
 
