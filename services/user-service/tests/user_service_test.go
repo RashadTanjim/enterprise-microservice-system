@@ -30,7 +30,7 @@ func setupTestDB(t *testing.T) *gorm.DB {
 func TestCreateUser(t *testing.T) {
 	db := setupTestDB(t)
 	repo := repository.NewUserRepository(db)
-	svc := service.NewUserService(repo)
+	svc := service.NewUserService(repo, nil)
 
 	ctx := context.Background()
 
@@ -89,7 +89,7 @@ func TestCreateUser(t *testing.T) {
 func TestGetUser(t *testing.T) {
 	db := setupTestDB(t)
 	repo := repository.NewUserRepository(db)
-	svc := service.NewUserService(repo)
+	svc := service.NewUserService(repo, nil)
 
 	ctx := context.Background()
 
@@ -143,7 +143,7 @@ func TestGetUser(t *testing.T) {
 func TestUpdateUser(t *testing.T) {
 	db := setupTestDB(t)
 	repo := repository.NewUserRepository(db)
-	svc := service.NewUserService(repo)
+	svc := service.NewUserService(repo, nil)
 
 	ctx := context.Background()
 
@@ -182,7 +182,7 @@ func TestUpdateUser(t *testing.T) {
 func TestDeleteUser(t *testing.T) {
 	db := setupTestDB(t)
 	repo := repository.NewUserRepository(db)
-	svc := service.NewUserService(repo)
+	svc := service.NewUserService(repo, nil)
 
 	ctx := context.Background()
 
@@ -218,7 +218,7 @@ func TestDeleteUser(t *testing.T) {
 func TestListUsers(t *testing.T) {
 	db := setupTestDB(t)
 	repo := repository.NewUserRepository(db)
-	svc := service.NewUserService(repo)
+	svc := service.NewUserService(repo, nil)
 
 	ctx := context.Background()
 

@@ -1,7 +1,7 @@
 # High-Level Design (HLD) – Enterprise Microservice System
 
 ## 1) Overview
-This system is a production-ready microservice architecture built with Go. It consists of three core services (User Service, Order Service, and Repository Service), each with its own database, shared libraries for cross-cutting concerns, and supporting infrastructure for observability, authentication, and CI.
+This system is a production-ready microservice architecture built with Go. It consists of three core services (User Service, Order Service, and Repository Service), each with its own database, a shared Redis cache for read-heavy endpoints, shared libraries for cross-cutting concerns, and supporting infrastructure for observability, authentication, and CI.
 
 ## 2) Goals
 - Provide clean, maintainable microservices with clear boundaries.
@@ -53,6 +53,7 @@ This system is a production-ready microservice architecture built with Go. It co
 - **User DB**: PostgreSQL (userdb)
 - **Order DB**: PostgreSQL (orderdb)
 - **Repository DB**: PostgreSQL (repositorydb)
+- **Redis Cache**: Shared cache for read-heavy endpoints
 
 Each service owns its database (database-per-service).
 
@@ -63,6 +64,11 @@ Each service owns its database (database-per-service).
 2. User Service validates client credentials and returns JWT.
 3. Client calls protected endpoints with `Authorization: Bearer <token>`.
 4. Middleware validates token and enforces role-based access.
+
+### 5.3 Read Caching
+1. Services check Redis for cached reads (detail or list endpoints).
+2. If a cache hit exists, the response is returned without a database call.
+3. On writes, services update or invalidate relevant cache entries.
 
 ### 5.2 Order Creation
 1. Client calls `POST /api/v1/orders` on Order Service.

@@ -83,10 +83,18 @@ services:
       - AUTH_CLIENT_ID=admin
       - AUTH_CLIENT_SECRET=admin123
       - AUTH_CLIENT_ROLES=admin
+      - REDIS_ENABLED=true
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      - REDIS_TTL_SECONDS=300
     ports:
       - "8081:8081"
     depends_on:
       user-db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: unless-stopped
     networks:
@@ -122,12 +130,20 @@ services:
       - AUTH_TOKEN_TTL_MINUTES=60
       - AUTH_SERVICE_SUBJECT=order-service
       - AUTH_SERVICE_ROLES=service
+      - REDIS_ENABLED=true
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      - REDIS_TTL_SECONDS=300
     ports:
       - "8082:8082"
     depends_on:
       order-db:
         condition: service_healthy
       user-service:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: unless-stopped
     networks:
@@ -157,10 +173,18 @@ services:
       - AUTH_JWT_ISSUER=enterprise-microservice-system
       - AUTH_JWT_AUDIENCE=enterprise-microservice-system
       - AUTH_TOKEN_TTL_MINUTES=60
+      - REDIS_ENABLED=true
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      - REDIS_TTL_SECONDS=300
     ports:
       - "8083:8083"
     depends_on:
       repository-db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: unless-stopped
     networks:
@@ -186,6 +210,23 @@ services:
     networks:
       - microservices
 
+  # Redis (cache)
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - microservices
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # Web Portal + Gateway
   web-portal:
     build:
@@ -208,6 +249,7 @@ volumes:
   user_db_data:
   order_db_data:
   repository_db_data:
+  redis_data:
   prometheus_data:
 
 networks:

@@ -16,6 +16,7 @@ type Config struct {
 	Database DatabaseConfig
 	Log      LogConfig
 	Auth     AuthConfig
+	Redis    RedisConfig
 }
 
 // ServerConfig holds server configuration
@@ -49,6 +50,16 @@ type AuthConfig struct {
 	ClientRoles  []string
 }
 
+// RedisConfig holds Redis cache configuration
+type RedisConfig struct {
+	Enabled    bool
+	Host       string
+	Port       string
+	Password   string
+	DB         int
+	DefaultTTL time.Duration
+}
+
 // Load loads configuration from environment variables
 func Load() (*Config, error) {
 	// Try to load .env file (optional in production)
@@ -62,6 +73,16 @@ func Load() (*Config, error) {
 	tokenTTLMinutes, err := strconv.Atoi(getEnv("AUTH_TOKEN_TTL_MINUTES", "60"))
 	if err != nil {
 		tokenTTLMinutes = 60
+	}
+
+	cacheTTLSeconds, err := strconv.Atoi(getEnv("REDIS_TTL_SECONDS", "300"))
+	if err != nil {
+		cacheTTLSeconds = 300
+	}
+
+	cacheDB, err := strconv.Atoi(getEnv("REDIS_DB", "0"))
+	if err != nil {
+		cacheDB = 0
 	}
 
 	config := &Config{
@@ -87,6 +108,14 @@ func Load() (*Config, error) {
 			ClientID:     getEnv("AUTH_CLIENT_ID", "admin"),
 			ClientSecret: getEnv("AUTH_CLIENT_SECRET", "admin123"),
 			ClientRoles:  getEnvList("AUTH_CLIENT_ROLES", []string{"admin"}),
+		},
+		Redis: RedisConfig{
+			Enabled:    getEnvBool("REDIS_ENABLED", true),
+			Host:       getEnv("REDIS_HOST", "localhost"),
+			Port:       getEnv("REDIS_PORT", "6379"),
+			Password:   getEnv("REDIS_PASSWORD", ""),
+			DB:         cacheDB,
+			DefaultTTL: time.Duration(cacheTTLSeconds) * time.Second,
 		},
 	}
 
@@ -128,4 +157,20 @@ func getEnvList(key string, defaultValues []string) []string {
 	}
 
 	return result
+}
+
+func getEnvBool(key string, defaultValue bool) bool {
+	value := strings.ToLower(strings.TrimSpace(os.Getenv(key)))
+	if value == "" {
+		return defaultValue
+	}
+
+	switch value {
+	case "1", "true", "yes", "y", "on":
+		return true
+	case "0", "false", "no", "n", "off":
+		return false
+	default:
+		return defaultValue
+	}
 }

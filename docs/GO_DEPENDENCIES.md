@@ -12,6 +12,7 @@ This document describes every module listed in `go.mod` and why it exists in thi
 | github.com/google/uuid | Request ID generation middleware. |
 | github.com/joho/godotenv | Loads `.env` files in local/dev. |
 | github.com/prometheus/client_golang | Prometheus metrics instrumentation. |
+| github.com/redis/go-redis/v9 | Redis client for caching in services. |
 | github.com/sony/gobreaker | Circuit breaker in order service. |
 | github.com/stretchr/testify | Testing assertions and mocks. |
 | github.com/swaggo/files | Swagger UI static assets. |
@@ -37,6 +38,7 @@ This document describes every module listed in `go.mod` and why it exists in thi
 | github.com/cloudwego/base64x | Base64 helpers used by Sonic. |
 | github.com/cloudwego/iasm | Assembly optimizations used by Sonic. |
 | github.com/davecgh/go-spew | Deep pretty-printer used by testify. |
+| github.com/dgryski/go-rendezvous | Rendezvous hashing used by go-redis. |
 | github.com/gabriel-vasile/mimetype | Content-type detection in Gin. |
 | github.com/gin-contrib/sse | Server-sent events utilities in Gin. |
 | github.com/go-openapi/jsonpointer | JSON pointer handling for Swagger tooling. |

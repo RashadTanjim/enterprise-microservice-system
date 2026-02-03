@@ -33,10 +33,16 @@ This system follows a **microservice architecture** with clean separation of con
        ┌────▼────┐          ┌────▼────┐          ┌──────▼────────┐
        │ User DB │          │ Order DB│          │ Repository DB │
        └─────────┘          └─────────┘          └───────────────┘
-            │                    │                     │
-       ┌────▼────────────────────▼─────────────────────▼────┐
-       │                 Prometheus Metrics                 │
-       └────────────────────────────────────────────────────┘
+            └───────────────┬───────────────┬───────────────┘
+                            ▼
+                      ┌────────────┐
+                      │ Redis Cache│
+                      │  Port 6379 │
+                      └────────────┘
+                            │
+       ┌────────────────────▼────────────────────┐
+       │             Prometheus Metrics          │
+       └─────────────────────────────────────────┘
 ```
 
 ![HLD](docs/hld-diagram.svg)
@@ -57,6 +63,7 @@ This system follows a **microservice architecture** with clean separation of con
 | HTTP Framework | Gin |
 | ORM | GORM |
 | Database | PostgreSQL 16 |
+| Cache | Redis 7 |
 | Migrations | golang-migrate |
 | Authentication | JWT (golang-jwt/jwt) |
 | Logging | Zap (structured logging) |
@@ -78,6 +85,7 @@ enterprise-microservice-system/
 │       └── ci.yml                  # CI: tests + link checks
 ├── common/                          # Shared libraries
 │   ├── auth/                       # JWT utilities
+│   ├── cache/                      # Redis cache helpers
 │   ├── circuitbreaker/             # Circuit breaker implementation
 │   ├── errors/                     # Custom error types
 │   ├── logger/                     # Structured logging
@@ -227,7 +235,12 @@ enterprise-microservice-system/
 - Rate limiting
 - Metrics collection
 
-### 10. Developer Experience
+### 10. Caching
+- Redis-backed cache for read-heavy endpoints
+- Configurable TTL per service
+- Safe cache fallbacks when Redis is unavailable
+
+### 11. Developer Experience
 - Hot reload with Air
 - Comprehensive Makefile
 - Docker Compose for local development
@@ -265,6 +278,7 @@ This will start:
 - Order Service (http://localhost:8082)
 - Repository Service (http://localhost:8083)
 - Web Portal + Gateway (http://localhost:8080)
+- Redis (localhost:6379)
 - PostgreSQL databases
 - Prometheus (http://localhost:9090)
 
@@ -485,6 +499,16 @@ make dev-order
 | AUTH_CLIENT_ROLES | Roles assigned to issued tokens (CSV) | admin |
 | AUTH_SERVICE_SUBJECT | Subject for service-to-service tokens | order-service |
 | AUTH_SERVICE_ROLES | Roles for service tokens (CSV) | service |
+
+#### Redis Cache
+| Variable | Description | Default |
+|----------|-------------|---------|
+| REDIS_ENABLED | Enable Redis caching | true |
+| REDIS_HOST | Redis host | localhost |
+| REDIS_PORT | Redis port | 6379 |
+| REDIS_PASSWORD | Redis password | (empty) |
+| REDIS_DB | Redis database index | 0 |
+| REDIS_TTL_SECONDS | Default cache TTL in seconds | 300 |
 
 ## API Documentation
 

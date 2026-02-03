@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"enterprise-microservice-system/common/auth"
+	"enterprise-microservice-system/common/cache"
 	"enterprise-microservice-system/common/logger"
 	"enterprise-microservice-system/common/metrics"
 	"enterprise-microservice-system/common/middleware"
@@ -64,7 +65,18 @@ func main() {
 
 	// Initialize dependencies
 	userRepo := repository.NewUserRepository(db)
-	userService := service.NewUserService(userRepo)
+	userCache, err := cache.NewRedisCache(cache.Config{
+		Enabled:    cfg.Redis.Enabled,
+		Host:       cfg.Redis.Host,
+		Port:       cfg.Redis.Port,
+		Password:   cfg.Redis.Password,
+		DB:         cfg.Redis.DB,
+		DefaultTTL: cfg.Redis.DefaultTTL,
+	}, "user-service")
+	if err != nil {
+		log.Warn("Redis cache disabled", zap.Error(err))
+	}
+	userService := service.NewUserService(userRepo, userCache)
 	userHandler := handler.NewUserHandler(userService, log)
 
 	authConfig := auth.Config{
