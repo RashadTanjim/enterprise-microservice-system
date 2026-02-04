@@ -76,6 +76,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push
+    if: ${{ secrets.KUBE_CONFIG_DATA != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,8 +92,8 @@ jobs:
         run: |
           mkdir -p $HOME/.kube
           if [ -z "$KUBE_CONFIG_DATA" ]; then
-            echo "KUBE_CONFIG_DATA secret is required" >&2
-            exit 1
+            echo "KUBE_CONFIG_DATA secret is missing; skipping deploy."
+            exit 0
           fi
           if echo "$KUBE_CONFIG_DATA" | base64 -d > $HOME/.kube/config 2>/dev/null; then
             echo "Loaded base64 kubeconfig"

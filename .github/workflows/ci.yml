@@ -5,7 +5,18 @@ on:
   pull_request:
 
 jobs:
-  test:
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Link check
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --config .lychee.toml README.md EXAMPLES.md
+          fail: true
+
+  backend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,14 +51,3 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: npm run build
-
-  link-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Link check
-        uses: lycheeverse/lychee-action@v1
-        with:
-          args: --config .lychee.toml README.md EXAMPLES.md
-          fail: true
