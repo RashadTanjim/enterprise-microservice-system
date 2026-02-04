@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"enterprise-microservice-system/common/auth"
-	"enterprise-microservice-system/common/cache"
-	"enterprise-microservice-system/common/logger"
-	"enterprise-microservice-system/common/metrics"
-	"enterprise-microservice-system/common/middleware"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/auth"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/cache"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/metrics"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/middleware"
 	"enterprise-microservice-system/services/audit-log-service/internal/api"
 	"enterprise-microservice-system/services/audit-log-service/internal/config"
 	"enterprise-microservice-system/services/audit-log-service/internal/handler"

@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"enterprise-microservice-system/common/audit"
-	"enterprise-microservice-system/common/auth"
-	"enterprise-microservice-system/common/errors"
-	"enterprise-microservice-system/common/logger"
-	"enterprise-microservice-system/common/response"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/audit"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/auth"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/response"
 	"time"
 
 	"github.com/gin-gonic/gin"

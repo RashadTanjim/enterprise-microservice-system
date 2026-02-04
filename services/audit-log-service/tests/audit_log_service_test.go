@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
 	"enterprise-microservice-system/services/audit-log-service/internal/model"
 	"enterprise-microservice-system/services/audit-log-service/internal/service"
 

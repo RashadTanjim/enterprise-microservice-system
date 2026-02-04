@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
 
 	"go.uber.org/zap"
 )

@@ -30,6 +30,9 @@ jobs:
         run: go mod download
       - name: Run tests
         run: make test
+      - name: Run common module tests
+        working-directory: common
+        run: go test ./...
 
   frontend:
     runs-on: ubuntu-latest

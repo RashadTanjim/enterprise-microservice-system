@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"enterprise-microservice-system/common/cache"
-	"enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/cache"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
 	"enterprise-microservice-system/services/order-service/internal/client"
 	"enterprise-microservice-system/services/order-service/internal/model"
 	"enterprise-microservice-system/services/order-service/internal/repository"

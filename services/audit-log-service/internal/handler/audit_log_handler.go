@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"enterprise-microservice-system/common/logger"
-	"enterprise-microservice-system/common/middleware"
-	"enterprise-microservice-system/common/response"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/middleware"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/response"
 	"enterprise-microservice-system/services/audit-log-service/internal/model"
 	"enterprise-microservice-system/services/audit-log-service/internal/service"
 	"math"

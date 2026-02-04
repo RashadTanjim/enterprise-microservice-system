@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"enterprise-microservice-system/common/errors"
-	"enterprise-microservice-system/common/response"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/response"
 	"sync"
 
 	"github.com/gin-gonic/gin"

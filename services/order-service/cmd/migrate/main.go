@@ -1,7 +1,7 @@
 package main
 
 import (
-	"enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
 	"enterprise-microservice-system/services/order-service/internal/config"
 	"enterprise-microservice-system/services/order-service/migrations"
 	"fmt"

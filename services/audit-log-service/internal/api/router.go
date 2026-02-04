@@ -1,10 +1,10 @@
 package api
 
 import (
-	"enterprise-microservice-system/common/auth"
-	"enterprise-microservice-system/common/logger"
-	"enterprise-microservice-system/common/metrics"
-	"enterprise-microservice-system/common/middleware"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/auth"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/metrics"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/middleware"
 	auditdocs "enterprise-microservice-system/services/audit-log-service/docs"
 	"enterprise-microservice-system/services/audit-log-service/internal/handler"
 	"net/http"
