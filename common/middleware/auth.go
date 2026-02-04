@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"enterprise-microservice-system/common/auth"
-	apperrors "enterprise-microservice-system/common/errors"
-	"enterprise-microservice-system/common/response"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/auth"
+	apperrors "github.com/RashadTanjim/enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/response"
 	"errors"
 	"strings"
 

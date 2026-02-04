@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"enterprise-microservice-system/common/errors"
-	"enterprise-microservice-system/common/logger"
-	"enterprise-microservice-system/common/response"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/response"
 	"fmt"
 	"runtime/debug"
 

@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"encoding/json"
-	"enterprise-microservice-system/common/auth"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/auth"
 	"net/http"
 	"net/http/httptest"
 	"testing"

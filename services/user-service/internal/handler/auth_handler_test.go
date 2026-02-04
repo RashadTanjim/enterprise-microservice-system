@@ -3,8 +3,8 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
-	"enterprise-microservice-system/common/auth"
-	"enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/auth"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
 	"net/http"
 	"net/http/httptest"
 	"testing"

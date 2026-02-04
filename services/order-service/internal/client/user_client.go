@@ -3,8 +3,8 @@ package client
 import (
 	"context"
 	"encoding/json"
-	"enterprise-microservice-system/common/circuitbreaker"
-	"enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/circuitbreaker"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
 	"enterprise-microservice-system/services/order-service/internal/model"
 	"fmt"
 	"net/http"

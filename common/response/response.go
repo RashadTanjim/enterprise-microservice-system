@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	apperrors "enterprise-microservice-system/common/errors"
+	apperrors "github.com/RashadTanjim/enterprise-microservice-system/common/errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

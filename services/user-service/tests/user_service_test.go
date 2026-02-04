@@ -2,7 +2,7 @@ package tests
 
 import (
 	"context"
-	"enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
 	"enterprise-microservice-system/services/user-service/internal/model"
 	"enterprise-microservice-system/services/user-service/internal/repository"
 	"enterprise-microservice-system/services/user-service/internal/service"

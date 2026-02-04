@@ -2,10 +2,10 @@ package handler
 
 import (
 	"encoding/json"
-	"enterprise-microservice-system/common/audit"
-	"enterprise-microservice-system/common/logger"
-	"enterprise-microservice-system/common/middleware"
-	"enterprise-microservice-system/common/response"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/audit"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/middleware"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/response"
 	"enterprise-microservice-system/services/order-service/internal/model"
 	"enterprise-microservice-system/services/order-service/internal/service"
 	"fmt"

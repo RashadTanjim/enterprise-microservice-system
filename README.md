@@ -171,6 +171,34 @@ enterprise-microservice-system/
 └── README.md                     # This file
 ```
 
+## Common Module
+
+The shared libraries in `common/` are published as a standalone Go module so other services (inside or outside this repo) can import it directly.
+
+### Module Path
+
+```
+github.com/RashadTanjim/enterprise-microservice-system/common
+```
+
+### Publish a New Version
+
+Use the release script to tag and push the module:
+
+```bash
+./scripts/publish-common.sh
+```
+
+This creates a tag like `common/v1.2.3` and pushes it to GitHub.
+
+### Use in Other Services
+
+```bash
+go get github.com/RashadTanjim/enterprise-microservice-system/common@v1.2.3
+```
+
+For local development in this repo, the root `go.mod` includes a `replace` directive pointing to `./common` so changes are picked up without publishing.
+
 ### Layer Responsibilities
 
 1. **Handler Layer**: Receives HTTP requests, validates input, calls service layer, returns HTTP responses

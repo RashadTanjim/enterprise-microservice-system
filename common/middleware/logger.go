@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"enterprise-microservice-system/common/logger"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/logger"
 	"time"
 
 	"github.com/gin-gonic/gin"

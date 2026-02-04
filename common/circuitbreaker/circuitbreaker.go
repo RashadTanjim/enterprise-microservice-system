@@ -2,7 +2,7 @@ package circuitbreaker
 
 import (
 	"context"
-	"enterprise-microservice-system/common/errors"
+	"github.com/RashadTanjim/enterprise-microservice-system/common/errors"
 	"fmt"
 	"time"
 
