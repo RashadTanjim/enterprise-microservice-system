@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://enterprise-microservice-system-go.netlify.app/sitemap.xml
