@@ -1,0 +1,101 @@
+name: PR Labeler
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  label-by-branch-prefix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply label from branch prefix
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = context.issue.number;
+            const headRef = (context.payload.pull_request?.head?.ref || '').toLowerCase();
+
+            const prefixMap = {
+              'feature/': { name: 'feature', color: '0e8a16', description: 'Feature work' },
+              'feat/': { name: 'feature', color: '0e8a16', description: 'Feature work' },
+              'fix/': { name: 'fix', color: 'd73a4a', description: 'Bug fix' },
+              'hotfix/': { name: 'fix', color: 'd73a4a', description: 'Bug fix' },
+              'docs/': { name: 'docs', color: '0075ca', description: 'Documentation updates' },
+              'chore/': { name: 'chore', color: 'c5def5', description: 'Maintenance chore' },
+              'refactor/': { name: 'refactor', color: '5319e7', description: 'Code refactor' },
+              'test/': { name: 'test', color: 'fbca04', description: 'Tests and quality checks' },
+              'ci/': { name: 'ci', color: '1d76db', description: 'CI/CD changes' },
+              'build/': { name: 'build', color: '0052cc', description: 'Build tooling changes' },
+              'perf/': { name: 'perf', color: 'ff9f1c', description: 'Performance improvements' },
+              'style/': { name: 'style', color: 'bfd4f2', description: 'Code style updates' },
+              'revert/': { name: 'revert', color: 'b60205', description: 'Revert changes' }
+            };
+
+            const managedLabels = [...new Set(Object.values(prefixMap).map((x) => x.name))];
+            const currentLabels = (context.payload.pull_request?.labels || []).map((l) => l.name);
+            const matchedPrefix = Object.keys(prefixMap).find((p) => headRef.startsWith(p));
+
+            // Remove previously managed type labels so only one branch-type label remains.
+            for (const existing of currentLabels) {
+              if (managedLabels.includes(existing)) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner,
+                    repo,
+                    issue_number,
+                    name: existing
+                  });
+                  core.info(`Removed existing managed label: ${existing}`);
+                } catch (error) {
+                  if (error.status !== 404) {
+                    throw error;
+                  }
+                }
+              }
+            }
+
+            if (!matchedPrefix) {
+              core.info(`No configured branch prefix matched for "${headRef}".`);
+              core.info(`Expected one of: ${Object.keys(prefixMap).join(', ')}`);
+              return;
+            }
+
+            const selected = prefixMap[matchedPrefix];
+
+            // Ensure the destination label exists.
+            try {
+              await github.rest.issues.getLabel({
+                owner,
+                repo,
+                name: selected.name
+              });
+            } catch (error) {
+              if (error.status === 404) {
+                await github.rest.issues.createLabel({
+                  owner,
+                  repo,
+                  name: selected.name,
+                  color: selected.color,
+                  description: selected.description
+                });
+                core.info(`Created missing label: ${selected.name}`);
+              } else {
+                throw error;
+              }
+            }
+
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number,
+              labels: [selected.name]
+            });
+
+            core.info(`Applied label "${selected.name}" from branch "${headRef}".`);
